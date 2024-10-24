@@ -5,7 +5,7 @@ The PyramidFlow project focuses on video generation using a pyramidal flow-match
 
 # How to run
 
-![Screenshot](screenshot.png)
+
 
 ```
 docker-compose -f docker-compose_pyramidflow.yml build
@@ -15,6 +15,7 @@ docker-compose -f docker-compose_pyramidflow.yml up
 
 Then, connect to the local Jupyter notebook (http://127.0.0.1:8888).
 
+![Screenshot](screenshot.png)
 
 
 # Forked branch
@@ -24,10 +25,11 @@ Then, connect to the local Jupyter notebook (http://127.0.0.1:8888).
 
 # TODO
 
-* 
+* Run and test the video generation in a GPU with less memory (8GB)
+* Update some scripts
+
 
 # Reference
-
 
 * https://huggingface.co/rain1011/pyramid-flow-sd3
 
