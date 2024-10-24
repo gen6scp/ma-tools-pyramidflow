@@ -1,10 +1,11 @@
-# PyramidFlow (GenAI) Docker
+# PyramidFlow (GenAI) with a GPU Docker
 
 The PyramidFlow project focuses on video generation using a pyramidal flow-matching technique, designed for training efficiency. It aims to create realistic, high-quality video content through an autoregressive approach that incrementally refines video frames in a multi-level, pyramid-like structure. The project showcases examples like cinematic scenes, nature shots, and detailed movements, highlighting its ability to generate both simple and complex scenarios from text or image inputs. 
 
 
 # How to run
 
+We create the environments in Miniconda and Docker. The conda "pyramid" env builds TensorFlow, PyTorch, Huggingface and Python-v3.8 under the CUDA Docker (nvidia/cuda:12.2.0-base-ubuntu22.04). This structure makes us easily possible to use local GPUs.
 
 
 ```
