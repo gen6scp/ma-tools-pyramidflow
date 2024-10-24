@@ -121,4 +121,5 @@ dmypy.json
 tmp
 tmp/*
 */tmp/
-
+output
+output/*
