@@ -1,0 +1,65 @@
+# Base Image with CUDA support
+FROM nvidia/cuda:12.2.0-base-ubuntu22.04
+
+# Set non-interactive environment
+ENV DEBIAN_FRONTEND=noninteractive
+ENV CMDARGS --listen
+
+# Install system dependencies
+RUN apt-get update -y && \
+    apt-get install -y curl libgl1 libglib2.0-0 python3-pip python-is-python3 git wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+## Installing Miniconda
+# Set environment variables to avoid prompts during Miniconda installation
+ENV MINICONDA_VERSION=latest \
+    PATH=/opt/conda/bin:$PATH
+
+# Download and install Miniconda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-$MINICONDA_VERSION-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm /tmp/miniconda.sh && \
+    /opt/conda/bin/conda init bash
+
+
+
+# Update PATH to use conda
+ENV PATH="/opt/conda/bin:$PATH"
+
+# Set up a new conda environment and install dependencies
+RUN bash -c "source /opt/conda/etc/profile.d/conda.sh && \
+    conda create -n pyramid python=3.8.10 -y && \
+    conda activate pyramid && \
+    git clone -b main https://github.com/jy0205/Pyramid-Flow /content/app && \
+    cd /content/app && \
+    git checkout fa4e1e52f71a46beb8bb29d1d3252232f3a47821 && \
+    pip install -r requirements.txt && \
+    conda install -y jupyter ipykernel && \
+    python -m ipykernel install --name pyramid --display-name 'Pyramid'"
+
+
+
+
+
+# Add a new user and prepare working directories
+RUN adduser --disabled-password --gecos '' user && \
+    mkdir -p /content/data && \
+    chown -R user:user /content
+
+# Set the working directory
+WORKDIR /content/app
+
+# Copy remaining application files
+COPY --chown=user:user . /content/app
+
+
+# Install Jupyter and necessary tools
+RUN pip install jupyterlab
+
+# Switch to the non-root user
+USER user
+
+# Set default command to run Jupyter Notebook
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+

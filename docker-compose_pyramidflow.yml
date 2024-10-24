@@ -1,0 +1,22 @@
+version: '2.4'
+
+volumes:
+  pyramidflow-data:
+
+services:
+  pyramidflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.pyramidflow  # Assuming Dockerfile is in the current directory
+    image: pyramidflow
+    container_name: pyramidflow-container
+    ports:
+      - "8888:8888"  # Expose port 8888 to access the application
+    volumes:
+      - pyramidflow-data:/content  # Mount local config.yaml to container
+      - ./output:/content/output            # Mount local output directory to container
+    runtime: nvidia  # Use NVIDIA runtime for CUDA compatibility
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all  # Ensure that all GPUs are available
+    stdin_open: true  # Keep standard input open if needed
+    tty: true  # Allocate a pseudo-TTY for the container
